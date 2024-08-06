@@ -296,7 +296,7 @@ type Monitoring struct {
 type RedpandaResources struct {
 	CPU struct {
 		Cores           resource.Quantity `json:"cores" jsonschema:"required"`
-		Overprovisioned *bool             `json:"overprovisioned"`
+		Overprovisioned *bool             `json:"overprovisioned" jsonschema:"nullable"`
 	} `json:"cpu" jsonschema:"required"`
 	// Memory resources
 	// For details,
@@ -304,7 +304,7 @@ type RedpandaResources struct {
 	Memory struct {
 		// Enables memory locking.
 		// For production, set to `true`.
-		EnableMemoryLocking *bool `json:"enable_memory_locking"`
+		EnableMemoryLocking *bool `json:"enable_memory_locking" jsonschema:"nullable"`
 		// It is recommended to have at least 2Gi of memory per core for the Redpanda binary.
 		// This memory is taken from the total memory given to each container.
 		// The Helm chart allocates 80% of the container's memory to Redpanda, leaving the rest for
@@ -325,7 +325,7 @@ type RedpandaResources struct {
 			// If omitted, the `min` value is equal to the `max` value (requested resources defaults to limits).
 			// This setting is equivalent to `resources.requests.memory`.
 			// For production, use 10Gi or greater.
-			Min *resource.Quantity `json:"min"`
+			Min *resource.Quantity `json:"min" jsonschema:"nullable"`
 			// Maximum memory count for each Redpanda broker.
 			// Equivalent to `resources.limits.memory`.
 			// For production, use `10Gi` or greater.

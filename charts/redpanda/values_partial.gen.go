@@ -135,12 +135,12 @@ type PartialMonitoring struct {
 type PartialRedpandaResources struct {
 	CPU *struct {
 		Cores           *resource.Quantity "json:\"cores,omitempty\" jsonschema:\"required\""
-		Overprovisioned *bool              "json:\"overprovisioned,omitempty\""
+		Overprovisioned *bool              "json:\"overprovisioned,omitempty\" jsonschema:\"nullable\""
 	} "json:\"cpu,omitempty\" jsonschema:\"required\""
 	Memory *struct {
-		EnableMemoryLocking *bool "json:\"enable_memory_locking,omitempty\""
+		EnableMemoryLocking *bool "json:\"enable_memory_locking,omitempty\" jsonschema:\"nullable\""
 		Container           *struct {
-			Min *resource.Quantity "json:\"min,omitempty\""
+			Min *resource.Quantity "json:\"min,omitempty\" jsonschema:\"nullable\""
 			Max *resource.Quantity "json:\"max,omitempty\" jsonschema:\"required\""
 		} "json:\"container,omitempty\" jsonschema:\"required\""
 		Redpanda *struct {
