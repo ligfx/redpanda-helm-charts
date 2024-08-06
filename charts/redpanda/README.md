@@ -625,7 +625,20 @@ CPU resources. For details, see the [Pod resources documentation](https://docs.r
 
 ### [resources.cpu.cores](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.cpu.cores)
 
-Redpanda makes use of a thread per core model. For details, see this [blog](https://redpanda.com/blog/tpc-buffers). For this reason, Redpanda should only be given full cores.  Note: You can increase cores, but decreasing cores is not currently supported. See the [GitHub issue](https://github.com/redpanda-data/redpanda/issues/350).  This setting is equivalent to `--smp`, `resources.requests.cpu`, and `resources.limits.cpu`. For production, use `4` or greater.  To maximize efficiency, use the `static` CPU manager policy by specifying an even integer for CPU resource requests and limits. This policy gives the Pods running Redpanda brokers access to exclusive CPUs on the node. See https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/#static-policy.
+Redpanda makes use of a thread per core model.
+For details, see this [blog](https://redpanda.com/blog/tpc-buffers).
+For this reason, Redpanda should only be given full cores.
+
+Note: You can increase cores, but decreasing cores is not currently supported.
+See the [GitHub issue](https://github.com/redpanda-data/redpanda/issues/350).
+
+This setting is equivalent to `--smp`, `resources.requests.cpu`, and `resources.limits.cpu`.
+For production, use `4` or greater.
+
+To maximize efficiency, use the `static` CPU manager policy by specifying an even integer for
+CPU resource requests and limits. This policy gives the Pods running Redpanda brokers
+access to exclusive CPUs on the node. See
+https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/#static-policy.
 
 **Default:** `1`
 
@@ -641,7 +654,23 @@ Memory resources For details, see the [Pod resources documentation](https://docs
 
 ### [resources.memory.container](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.memory.container)
 
-Enables memory locking. For production, set to `true`. enable_memory_locking: false  It is recommended to have at least 2Gi of memory per core for the Redpanda binary. This memory is taken from the total memory given to each container. The Helm chart allocates 80% of the container's memory to Redpanda, leaving the rest for the Seastar subsystem (reserveMemory) and other container processes. So at least 2.5Gi per core is recommended in order to ensure Redpanda has a full 2Gi.  These values affect `--memory` and `--reserve-memory` flags passed to Redpanda and the memory requests/limits in the StatefulSet. Valid suffixes: k, M, G, T, P, Ki, Mi, Gi, Ti, Pi To create `Guaranteed` Pod QoS for Redpanda brokers, provide both container max and min values for the container. For details, see https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/#create-a-pod-that-gets-assigned-a-qos-class-of-guaranteed * Every container in the Pod must have a memory limit and a memory request. * For every container in the Pod, the memory limit must equal the memory request.
+It is recommended to have at least 2Gi of memory per core for the Redpanda binary.
+This memory is taken from the total memory given to each container.
+The Helm chart allocates 80% of the container's memory to Redpanda, leaving the rest for
+the Seastar subsystem (reserveMemory) and other container processes.
+So at least 2.5Gi per core is recommended in order to ensure Redpanda has a full 2Gi.
+
+These values affect `--memory` and `--reserve-memory` flags passed to Redpanda and the memory
+requests/limits in the StatefulSet.
+
+Valid suffixes: k, M, G, T, P, Ki, Mi, Gi, Ti, Pi
+
+To create `Guaranteed` Pod QoS for Redpanda brokers, provide both container max and min values for the container.
+For details, see
+https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/#create-a-pod-that-gets-assigned-a-qos-class-of-guaranteed
+
+* Every container in the Pod must have a memory limit and a memory request.
+* For every container in the Pod, the memory limit must equal the memory request.
 
 **Default:** `{"max":"2.5Gi"}`
 
