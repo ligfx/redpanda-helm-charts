@@ -614,14 +614,18 @@ Pod resource management. This section simplifies resource allocation by providin
 **Default:**
 
 ```
-{"cpu":{"cores":1},"memory":{"container":{"max":"2.5Gi"}}}
+{"cpu":{"cores":1,"overprovisioned":null},"memory":{"container":{"max":"2.5Gi","min":null},"enable_memory_locking":null}}
 ```
 
 ### [resources.cpu](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.cpu)
 
 CPU resources. For details, see the [Pod resources documentation](https://docs.redpanda.com/docs/manage/kubernetes/manage-resources/#configure-cpu-resources).
 
-**Default:** `{"cores":1}`
+**Default:**
+
+```
+{"cores":1,"overprovisioned":null}
+```
 
 ### [resources.cpu.cores](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.cpu.cores)
 
@@ -642,6 +646,17 @@ https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/#sta
 
 **Default:** `1`
 
+### [resources.cpu.overprovisioned](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.cpu.overprovisioned)
+
+Overprovisioned means Redpanda won't assume it has all of the provisioned CPU.
+This should be true unless the container has CPU affinity.
+Equivalent to: `--idle-poll-time-us 0 --thread-affinity 0 --poll-aio 0`
+
+If the value of full cores in `resources.cpu.cores` is less than `1`, this
+setting defaults to `true`. Otherwise, it defaults to `false`.
+
+**Default:** `nil`
+
 ### [resources.memory](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.memory)
 
 Memory resources For details, see the [Pod resources documentation](https://docs.redpanda.com/docs/manage/kubernetes/manage-resources/#configure-memory-resources).
@@ -649,7 +664,7 @@ Memory resources For details, see the [Pod resources documentation](https://docs
 **Default:**
 
 ```
-{"container":{"max":"2.5Gi"}}
+{"container":{"max":"2.5Gi","min":null},"enable_memory_locking":null}
 ```
 
 ### [resources.memory.container](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.memory.container)
@@ -672,13 +687,25 @@ https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/#cr
 * Every container in the Pod must have a memory limit and a memory request.
 * For every container in the Pod, the memory limit must equal the memory request.
 
-**Default:** `{"max":"2.5Gi"}`
+**Default:** `{"max":"2.5Gi","min":null}`
 
 ### [resources.memory.container.max](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.memory.container.max)
 
 Maximum memory count for each Redpanda broker. Equivalent to `resources.limits.memory`. For production, use `10Gi` or greater.
 
 **Default:** `"2.5Gi"`
+
+### [resources.memory.container.min](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.memory.container.min)
+
+Minimum memory count for each Redpanda broker. If omitted, the `min` value is equal to the `max` value (requested resources defaults to limits). This setting is equivalent to `resources.requests.memory`. For production, use 10Gi or greater.
+
+**Default:** `nil`
+
+### [resources.memory.enable_memory_locking](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=resources.memory.enable_memory_locking)
+
+Enables memory locking. For production, set to `true`.
+
+**Default:** `nil`
 
 ### [serviceAccount](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=serviceAccount)
 
